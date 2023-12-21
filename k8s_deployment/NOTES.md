@@ -54,6 +54,61 @@ $ kubectl delete -f pod.yaml
 
 1. Describing apps using Kubernetes YAML
 
-   - All containers in Kubernetes are scheduled as pods, which are groups of co-located containers that share some resources. Furthermore, in a realistic application you almost never create individual pods. Instead, most of your workloads are scheduled as deployments, which are scalable groups of pods maintained automatically by Kubernetes
+   - All containers in Kubernetes are scheduled as pods, which are groups of co-located containers that share some resources. Furthermore, in a realistic application **_you almost never create individual pods_**. Instead, most of your workloads are scheduled as deployments, which are scalable groups of pods maintained automatically by Kubernetes
+
+
+   - Lastly, all Kubernetes objects can and should be described in manifests called Kubernetes YAML files. **These YAML files describe all the components and configurations of your Kubernetes app, and can be used to create and destroy your app in any Kubernetes environment**
+   
+   - Create a 'bb.yaml' file:
+    ```yaml
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: bb-demo
+        namespace: default
+      spec:
+        replicas: 1
+        selector:
+            matchLabels:
+              bb: web
+        template:
+            metadata:
+              labels:
+                  bb: web
+            spec:
+              containers:
+                  - name: bb-site
+                    image: getting-started
+                    imagePullPolicy: Never
+      ---
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: bb-entrypoint
+        namespace: default
+      spec:
+        type: NodePort
+        selector:
+            bb: web
+        ports:
+            - port: 3000
+              targetPort: 3000
+              nodePort: 30001
+      ```
+  In this Kubernetes YAML file, there are two objects, separated by the ---:
+
+  - A **Deployment**, describing a scalable group of identical pods. In this case, you'll get just one **replica**, or copy of your pod, and that pod (which is described under the **template**: key) has just one container in it, based off of your **getting-started** image from the previous step in this tutorial.
+
+  - A **NodePort** service, which will route traffic from port 30001 on your host to port 3000 inside the pods it routes to, allowing you to reach your Todo app from the network.
+
+
+  - Also, notice that while Kubernetes YAML can appear long and complicated at first, it almost always follows the same pattern:
+
+    + The **apiVersion**, which indicates the Kubernetes API that parses this object
+    + The **kind** indicating what sort of object this is
+    + Some **metadata** applying things like names to your objects
+    + The **spec** specifying all the parameters and configurations of your object.
+
+
 
 

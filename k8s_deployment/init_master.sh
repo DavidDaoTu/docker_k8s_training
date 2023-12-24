@@ -4,11 +4,16 @@
 ## Refer to: 
 ## https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
+# Clean up first
+#systemctl restart cri-docker.service
+yes | sudo kubeadm reset -f
+
 ### Temporarily turn off "swap configuration" mechanism.
 sudo swapoff -a
 
+
 ### Init cluster
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket unix:///var/run/cri-dockerd.sock
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 
 ### output message of the above command if sucess would looks like:
 ### ---------------
@@ -35,7 +40,7 @@ sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket unix:///var/run/
 ### -------------------
 
 mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+yes | sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ### Deploy a pod network.

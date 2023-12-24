@@ -29,7 +29,7 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 sudo apt-get update -y
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 
 ### For container run-time interface (containerd)
@@ -39,6 +39,6 @@ containerd config default > ./config.toml
 # SystemdCgroup = true
 # Use Stream Editor command: https://www.cyberciti.biz/faq/how-to-use-sed-to-find-and-replace-text-in-files-in-linux-unix-shell/
 sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' config.toml
-sudo cp -r ./config.toml > /etc/containerd/config.toml
+sudo cp -r ./config.toml /etc/containerd/config.toml
 sudo sysctl --system
 sudo systemctl restart containerd

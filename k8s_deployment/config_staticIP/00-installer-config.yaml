@@ -1,0 +1,17 @@
+# Please the guide: https://ostechnix.com/configure-static-ip-address-ubuntu/
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    enp4s0:
+      #dhcp4: true
+      dhcp4: false 
+      addresses:
+        - 192.168.1.24/24
+      routes:
+        - to: default
+          via: 192.168.1.1 
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
+  version: 2

@@ -9,6 +9,7 @@
 yes | sudo kubeadm reset -f
 
 ### Temporarily turn off "swap configuration" mechanism.
+## For disalbe swap permanently: https://tecadmin.net/disable-swapfile-on-ubuntu/
 sudo swapoff -a
 
 

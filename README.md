@@ -7,3 +7,6 @@ Inside "getting-started-app" directory, please run the following command:
 $ docker build -t getting-started -f ../k8s_deployment/Dockerfile .
 
 ```
+
+## To create a tunnel of vscode
+https://code.visualstudio.com/docs/remote/tunnels

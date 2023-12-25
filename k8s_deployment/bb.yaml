@@ -15,7 +15,11 @@ spec:
       spec:
          containers:
             - name: bb-site
-              image: getting-started
+              ### Pull from Docker Hub
+              #image: davidfullstack/getting-started-tu:v1
+              #imagePullPolicy: IfNotPresent
+              ### Local Development
+              image: getting-started:latest
               imagePullPolicy: Never
 ---
 apiVersion: v1

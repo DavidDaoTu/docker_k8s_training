@@ -6,7 +6,12 @@
 
 # Clean up first
 #systemctl restart cri-docker.service
-yes | sudo kubeadm reset -f
+# $yes | sudo kubeadm reset -f
+# Note: If using multiple container interfaces (CRI) endpoints.
+# We must specify the endpoint: 
+# For instance: We used cri-dockerd with Docker Engine
+yes | sudo kubeadm reset -f --cri-socket unix:///var/run/cri-dockerd.sock
+
 
 ### Temporarily turn off "swap configuration" mechanism.
 ## For disalbe swap permanently: https://tecadmin.net/disable-swapfile-on-ubuntu/
@@ -14,7 +19,11 @@ sudo swapoff -a
 
 
 ### Init cluster
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+# $ sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+# Note: If using multiple container interfaces (CRI) endpoints.
+# We must specify the endpoint: 
+# For instance: We used cri-dockerd with Docker Engine
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket unix:///var/run/cri-dockerd.sock
 
 ### output message of the above command if sucess would looks like:
 ### ---------------
@@ -59,7 +68,7 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 
 ### Join a node (if you have more than 01 machine node) - Run this command on another machine
-# kubeadm join 192.168.2.18:6443 --token regfmr.a4qbvicng9ln29wl \
+# sudo kubeadm join 192.168.2.18:6443 --token regfmr.a4qbvicng9ln29wl \
 # 	--discovery-token-ca-cert-hash sha256:6a44703f6871c755b06362ad2204d091cdc8073f3e2647e6c3deaac9872ed890
 
 ### If there is any errors during the above, please reset

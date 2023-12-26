@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # A Deployment named nginx-deployment is created
+  # This name will become the basis for the ReplicaSets and Pods which are created later
+  name: kubernetes-bootcamp-tu-deployment
+spec:
+  # The Deployment creates a ReplicaSet that creates three replicated Pods, indicated by the .spec.replicas field
+  replicas: 2
+
+  # The .spec.selector field defines how the created ReplicaSet finds which Pods to manage
+  # In this case, you select a label that is defined in the Pod template
+  selector:
+    matchLabels:
+      app: kubernetes-bootcamp-tu
+
+  # The template field contains the following sub-fields:
+  #   - The Pods are labeled app: nginx using the .metadata.labels field.
+  #   - The Pod template's specification, or .template.spec field, 
+  #     indicates that the Pods run one container, nginx, which runs the nginx Docker Hub image at version 1.14.2.
+  #   - Create one container and name it nginx using the .spec.template.spec.containers[0].name field.
+  template:
+    metadata:
+      labels: 
+        app: kubernetes-bootcamp-tu
+    spec:
+      containers:
+        - name: kubernetes-bootcamp
+          image: gcr.io/google-samples/kubernetes-bootcamp:v1
+          imagePullPolicy: IfNotPresent
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-bootcamp-tu-entrypoint
+spec:
+  type: NodePort
+  selector:
+    app: kubernetes-bootcamp-tu
+  ports:
+      - port: 8080 # Inside the cluster, what port does the service expose?: Incomming service's port: Src
+        targetPort: 8080 # Which port do pods selected by this service expose? Outgoing service's port: Dst
+        nodePort: 30001 # Machine/Node's port

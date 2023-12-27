@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mongodb
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - image: mongodb/mongodb-community-server:6.0.8-ubi8
+        imagePullPolicy: IfNotPresent
+        name: mongodb
+        securityContext:
+          runAsUser: 0
+        # command: ["printenv"]
+        # args: ["HOSTNAME", "KUBERNETES_PORT"]
+        env:
+          # Use secret in real usage
+        - name: MONGODB_INITDB_ROOT_USERNAME
+          value: admin
+        - name: MONGODB_INITDB_ROOT_PASSWORD
+          value: admin
+        ports:
+        - containerPort: 27017
+          name: mongodb
+        volumeMounts:
+        - name: mongodb-persistent-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongodb-persistent-storage
+        persistentVolumeClaim:
+          claimName: mongodb-pv-claim

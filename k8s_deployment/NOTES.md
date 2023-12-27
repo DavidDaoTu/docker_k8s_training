@@ -50,7 +50,7 @@ PING 8.8.8.8 (8.8.8.8): 56 data bytes
 $ kubectl delete -f pod.yaml
 ```
 
-## II. [Deploy to Kubernetes](https://docs.docker.com/get-started/kube-deploy/)
+## II. [Deploy to Kubernetes (from Docker Tutorials)](https://docs.docker.com/get-started/kube-deploy/)
 
 1. Describing apps using Kubernetes YAML
 
@@ -110,5 +110,35 @@ $ kubectl delete -f pod.yaml
     + The **spec** specifying all the parameters and configurations of your object.
 
 
+## III. [Kubernetes Tasks - Run applications](https://kubernetes.io/docs/tasks/run-application/)
+### 1. Run a Stateless Applications using a Deployment
+### 2. Run a Stateful Applications using a Deployment
 
+Please refer to this guideline: https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/
+
++ The mongodb deployment is at [mongodb-deployment.yaml](./stateful_apps/mongodb-deployment.yaml)
++ The mongodb persistent volume (PV) & persistent volume claim (PVC) is at [mongodb-persistent-volume.yaml](./stateful_apps/mongodb-persistent-volume.yaml)
+
+Run the demo under the folder *"stateful_apps"*
+```bash
+$ kubectl apply -f mongodb-persistent-volume.yaml
+$ kubectl apply -f mongodb-deployment.yaml
+```
+
+Accessing the MongoDB instance:
+Run a MySQL client to connect to the MongoDB community server:
+```bash
+$ kubectl run -it --rm --image=mongodb/mongodb-community-server:6.0.8-ubi8 --restart=Never mongosh -- mongosh "mongodb://admin:admin@mongodb"
+```
+Seed/initiate the data for a new MongoDB instance:
+Refer to the mongodb tutorials
+1. https://www.w3schools.com/mongodb/mongodb_mongosh_create_collection.php
+2. https://www.mongodb.com/developer/products/mongodb/cheat-sheet/
+3. https://www.tutorialspoint.com/mongodb/index.htm
+
+```bash
+$ db.createCollection('users')
+$ db.users.insertOne({name: 'tudao', age: '30'})
+$ db.users.find().pretty()
+```
 

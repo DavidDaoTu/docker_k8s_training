@@ -1,0 +1,33 @@
+####### References:
+## 1. https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/
+## 2. https://github.com/justmeandopensource/kubernetes/blob/master/yamls/mongodb/mongodb-statefulset.yaml
+## 3. https://github.com/pelthepu/Kubernetes/blob/master/resources/statefulsets/statefulset.yaml
+########
+
+## Step 1: Create services
+## Step 1.a: Headless service for stable DNS entries of StatefulSet members.
+## For instances: The headless Service is named mysql, the Pods are accessible 
+## by resolving <pod-name>.mongodb-svc from within any other Pod in the same Kubernetes 
+## cluster and namespace.
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc
+  labels:
+    app: mongodb-svc
+spec:
+  ports:
+  - name: mongodb
+    port: 27017
+  clusterIP: None
+  selector:
+    app: mongodb-sts
+---
+## Step 1.b: Services for reading replicas
+##
+##
+##
+
+
+
+

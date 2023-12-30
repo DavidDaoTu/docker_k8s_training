@@ -112,6 +112,14 @@ $ kubectl delete -f pod.yaml
 
 ## III. [Kubernetes Tasks - Run applications](https://kubernetes.io/docs/tasks/run-application/)
 ### 1. Run a Stateless Applications using a Deployment
+
+The stateless app deployment could be found at [kubernetes-bootcamp.yaml](./kubernetes-bootcamp.yaml)
+
+Please refer to: 
+
+1. https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+2. https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/
+
 ### 2. Run a Stateful Applications using a Deployment
 
 Please refer to this guideline: https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/
@@ -142,3 +150,33 @@ $ db.users.insertOne({name: 'tudao', age: '30'})
 $ db.users.find().pretty()
 ```
 
+### 3. [Run a Replicated Stateful Application](https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/)
+
+How to deploy ReplicaSet in MongoDB
+Refer: https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set/
+
+```bash
+rs.initiate( {
+   _id : "rs0",
+   members: [
+      { _id: 0, host: "mongodb-sts-0.mongodb-svc.default.svc.cluster.local:27017" },
+      { _id: 1, host: "mongodb-sts-1.mongodb-svc.default.svc.cluster.local:27017" },
+      { _id: 2, host: "mongodb-sts-2.mongodb-svc.default.svc.cluster.local:27017" }
+   ]
+})
+```
+
+
+
+Refer to configmap:
+1. https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
+2. https://kubernetes.io/docs/concepts/configuration/configmap/#using-configmaps-as-files-from-a-pod
+
+
+
+Debug:
+1. How to run a Shell in Pod's container: 
+   ```bash
+   $ kubectl get pods
+   $ kubectl exec -it mynginx-56766fcf49-4b6ls -- /bin/bash
+   ```

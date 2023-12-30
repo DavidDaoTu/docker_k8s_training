@@ -1,0 +1,84 @@
+####### References:
+## 1. https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/
+## 2. https://github.com/justmeandopensource/kubernetes/blob/master/yamls/mongodb/mongodb-statefulset.yaml
+## 3. https://github.com/pelthepu/Kubernetes/blob/master/resources/statefulsets/statefulset.yaml
+########
+
+## Step 2: Create statefulset
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb-sts
+spec:
+  selector:
+    matchLabels:
+      app: mongodb # Should match to pod's label
+  serviceName: mongodb-svc
+  replicas: 3
+  # Pod template
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    # Container specs
+    spec:
+      securityContext:
+        runAsUser: 0
+      containers:
+        - name: mongodb
+          image: mongodb/mongodb-community-server:6.0.8-ubi8
+          imagePullPolicy: IfNotPresent
+          ## Environemt variables or Secret
+          envFrom:
+            - secretRef:
+                name: mongodb-secret 
+          # Command & arguments for container
+          # Plz refer to: https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set/#start-each-member-of-the-replica-set-with-the-appropriate-options
+          # Start mongod with a configuration file, specify the configuration file's path with the --config option:
+          command: ["mongod"]
+          args: ["--config", "/etc/mongodb/mongodb.conf"]          
+          volumeMounts:
+              # The default directory in the container where the mongod instance stores its data.            
+              # See for more: https://www.mongodb.com/docs/manual/reference/configuration-options/#mongodb-setting-storage.dbPath
+            - name: mongodb-pvc   
+              mountPath: /data/db 
+              # MongoDB config file's mount point in the container
+            - name: mongodb-config
+              mountPath: /etc/mongodb #unsed directory name
+              readOnly: true
+      # You set volumes at the Pod level, then mount them into containers inside that Pod
+      volumes:
+        - name: mongodb-config
+          # Adding the mongodb config file into the container by ConfigMap
+          # Refer to: https://kubernetes.io/docs/concepts/configuration/configmap/#using-configmaps-as-files-from-a-pod
+          configMap:
+            # Provide the name of the ConfigMap you want to mount.
+            # Each key in the ConfigMap "data" map becomes the filename under mountPath.
+            name: mongodb-configmap
+  # The volumeClaimTemplates will provide stable storage using PersistentVolumes 
+  # provisioned by a PersistentVolume Provisioner.
+  # Please refer to: 
+  # 1. https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#volume-claim-templates
+  # 2. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-pvc
+      spec:
+        accessModes: 
+          - ReadWriteMany
+        # If use dynamic provisioning:
+        # Please refer to: https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/#using-dynamic-provisioning
+        # storageClassName: fast
+        ### This case, we use static provision
+        # Refer to: https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+        storageClassName: local-storage
+        resources:
+          requests:
+            storage: 1Gi
+
+
+
+
+              
+
+          

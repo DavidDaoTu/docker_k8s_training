@@ -1,0 +1,56 @@
+### Peristent Volume
+## Refer to: 
+#### 1. https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+### hostPath volume type
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 10Gi
+  accessModes:
+    #- ReadWriteOnce
+    - ReadWriteMany
+    # - ReadWriteOncePod
+  hostPath:
+    path: "/mnt/disks/ssd1/data_db"
+
+#### 2. https://kubernetes.io/docs/concepts/storage/volumes/#local
+#### Local volume type
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: mongodb-pv
+#   labels:
+#     type: local
+# spec:
+#   capacity:
+#     storage: 10Gi
+#   volumeMode: Filesystem
+#   accessModes:
+#     # - ReadWriteOnce
+#     - ReadWriteMany
+#   storageClassName: local-storage
+#   local:
+#     path: /mnt/disks/ssd1/data_db
+#   nodeAffinity:
+#     required:
+#       nodeSelectorTerms:
+#       - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: In
+#           values:
+#           - tudao-ideapad-5-pro-14iap7
+---
+## Refer to: https://kubernetes.io/docs/concepts/storage/storage-classes/#local
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain

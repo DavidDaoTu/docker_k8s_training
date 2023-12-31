@@ -5,20 +5,47 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mongodb-pv
+  name: mongodb-pv1
   labels:
     type: local
 spec:
   storageClassName: local-storage
   capacity:
-    storage: 10Gi
+    storage: 5Gi
   accessModes:
-    #- ReadWriteOnce
-    - ReadWriteMany
-    # - ReadWriteOncePod
+    - ReadWriteOnce
   hostPath:
     path: "/mnt/disks/ssd1/data_db"
-
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv2
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/disks/ssd2/data_db"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv3
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/disks/ssd3/data_db"
 #### 2. https://kubernetes.io/docs/concepts/storage/volumes/#local
 #### Local volume type
 # apiVersion: v1

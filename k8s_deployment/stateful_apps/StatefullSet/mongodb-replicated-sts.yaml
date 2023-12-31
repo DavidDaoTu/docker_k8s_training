@@ -15,6 +15,7 @@ spec:
       app: mongodb # Should match to pod's label
   serviceName: mongodb-svc
   replicas: 3
+  minReadySeconds: 3 # by default is 0
   # Pod template
   template:
     metadata:
@@ -24,6 +25,7 @@ spec:
     spec:
       securityContext:
         runAsUser: 0
+      terminationGracePeriodSeconds: 3
       containers:
         - name: mongodb
           image: mongodb/mongodb-community-server:6.0.8-ubi8
@@ -60,12 +62,12 @@ spec:
   # Please refer to: 
   # 1. https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#volume-claim-templates
   # 2. https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims
-  volumeClaimTemplates:
+  volumeClaimTemplates: # This template will be used to create PVC
     - metadata:
         name: mongodb-pvc
       spec:
         accessModes: 
-          - ReadWriteMany
+          - ReadWriteOnce
         # If use dynamic provisioning:
         # Please refer to: https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/#using-dynamic-provisioning
         # storageClassName: fast

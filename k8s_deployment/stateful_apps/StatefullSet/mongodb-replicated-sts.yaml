@@ -9,18 +9,20 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb-sts
+  labels:
+    app: mongodb-sts
 spec:
   selector:
     matchLabels:
-      app: mongodb # Should match to pod's label
-  serviceName: mongodb-svc
+      app: mongodb # Should match to below pod template's label
+  serviceName: mongodb-svc # Headless Services
   replicas: 3
   minReadySeconds: 3 # by default is 0
   # Pod template
   template:
     metadata:
       labels:
-        app: mongodb
+        app: mongodb # pod label must be matched by above selector
     # Container specs
     spec:
       securityContext:
@@ -30,6 +32,9 @@ spec:
         - name: mongodb
           image: mongodb/mongodb-community-server:6.0.8-ubi8
           imagePullPolicy: IfNotPresent
+          ports:
+            - name: mongodb-port
+              containerPort: 27017
           ## Environemt variables or Secret
           envFrom:
             - secretRef:

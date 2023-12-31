@@ -9,6 +9,9 @@
 ## For instances: The headless Service is named mysql, the Pods are accessible 
 ## by resolving <pod-name>.mongodb-svc from within any other Pod in the same Kubernetes 
 ## cluster and namespace.
+## If need more infor about a stable network ID
+## Refer to: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#stable-network-id
+## For instance: <mongodb-sts-0>.mongodb-svc.default.svc.cluster.local
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,9 +22,11 @@ spec:
   ports:
   - name: mongodb
     port: 27017
+    targetPort: 27017
   clusterIP: None
+  ## Pleas refer to this: https://kubernetes.io/docs/concepts/services-networking/service/#with-selectors
   selector:
-    app: mongodb-sts
+    app: mongodb # Point to Pod's label, not statefulset
 ---
 ## Step 1.b: Services for reading replicas
 ##

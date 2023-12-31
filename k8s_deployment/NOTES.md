@@ -164,9 +164,16 @@ rs.initiate( {
       { _id: 2, host: "mongodb-sts-2.mongodb-svc.default.svc.cluster.local:27017" }
    ]
 })
+## For debug only
+rs.initiate( {
+   _id : "rs0",
+   members: [
+      { _id: 0, host: "10.244.0.156:27017" },
+      { _id: 1, host: "10.244.0.155:27017" },
+      { _id: 2, host: "10.244.0.154:27017" }
+   ]
+})
 ```
-
-
 
 Refer to configmap:
 1. https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/

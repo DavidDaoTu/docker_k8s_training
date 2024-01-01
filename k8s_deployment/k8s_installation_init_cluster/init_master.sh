@@ -73,3 +73,12 @@ kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 ### If there is any errors during the above, please reset
 # sudo kubeadm reset --cri-socket unix:///var/run/cri-dockerd.sock
+
+
+#### Restart daemon
+#Daemon reload
+# $ systemctl daemon-reload
+# $ systemctl enable cri-docker.service
+# $ systemctl enable --now cri-docker.socket
+# Apply sysctl params without reboot
+# $ sudo sysctl --system

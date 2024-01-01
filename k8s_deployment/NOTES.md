@@ -152,10 +152,30 @@ $ db.users.find().pretty()
 
 ### 3. [Run a Replicated Stateful Application](https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/)
 
-How to deploy ReplicaSet in MongoDB
-Refer: https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set/
+How to deploy ReplicaSet of MongoDB by Kubernetes StatefulSet
+References: 
+1. https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set/
+2. https://blog.knoldus.com/how-to-deploy-mongodb-cluster-on-kubernetes/
+3. https://github.com/cvallance/mongo-k8s-sidecar/blob/master/example/StatefulSet/mongo-statefulset.yaml
+4. https://github.com/pelthepu/Kubernetes/blob/master/resources/statefulsets/statefulset.yaml
+5. https://github.com/kubernetes/examples/blob/412a68d90354cd6a5a5d083b0f1b919d746cc396/cassandra/cassandra-statefulset.yaml
 
+Steps to deploy the statefulSet MongoDB with Persistent Volumes:
+Under the folder Stateful_apps/StatefulSet
 ```bash
+$ sudo swapoff -a
+$ kubectl apply -f mongodb-services.yaml
+$ kubectl apply -f mongodb-configmap.yaml
+$ kubectl apply -f mongodb-secret.yaml
+$ kubectl apply -f mongodb-pv.yaml
+$ kubectl apply -f mongodb-replicated-sts.yaml
+```
+
+To Enabled the ReplicaSet in MongoDB, please run
+```bash
+$ kubectl exec -it mongodb-sts-0 -- /bin/bash
+$ mongosh
+test > 
 rs.initiate( {
    _id : "rs0",
    members: [
@@ -164,15 +184,15 @@ rs.initiate( {
       { _id: 2, host: "mongodb-sts-2.mongodb-svc.default.svc.cluster.local:27017" }
    ]
 })
-## For debug only
-rs.initiate( {
-   _id : "rs0",
-   members: [
-      { _id: 0, host: "10.244.0.156:27017" },
-      { _id: 1, host: "10.244.0.155:27017" },
-      { _id: 2, host: "10.244.0.154:27017" }
-   ]
-})
+#### For debug DNS issue only: We directly enter the Pods' IP
+# rs.initiate( {
+#    _id : "rs0",
+#    members: [
+#       { _id: 0, host: "10.244.0.156:27017" },
+#       { _id: 1, host: "10.244.0.155:27017" },
+#       { _id: 2, host: "10.244.0.154:27017" }
+#    ]
+# })
 ```
 
 Refer to configmap:
@@ -181,7 +201,7 @@ Refer to configmap:
 
 
 
-Debug:
+Debug Pod:
 1. How to run a Shell in Pod's container: 
    ```bash
    $ kubectl get pods

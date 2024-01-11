@@ -134,7 +134,7 @@ $ kubectl apply -f mongodb-deployment.yaml
 ```
 
 Accessing the MongoDB instance:
-Run a MySQL client to connect to the MongoDB community server:
+Run a Mongo Shell client to connect to the MongoDB community server:
 ```bash
 $ kubectl run -it --rm --image=mongodb/mongodb-community-server:6.0.8-ubi8 --restart=Never mongosh -- mongosh "mongodb://admin:admin@mongodb"
 ```
@@ -149,6 +149,23 @@ $ db.createCollection('users')
 $ db.users.insertOne({name: 'tudao', age: '30'})
 $ db.users.find().pretty()
 ```
+
+There is another method that uses "**MongoDB compass GUI**" with port-forwarding:
+
+```bash
+$ kubectl port-forward service/mongodb-svc 28015:27017
+```
+  <p align="center">
+  MongoDB seeding with port forwarding
+   <img src="resources/mongodb-compass-seed.png" width="100%" title="MongoDB seeding with port forwarding" alt="MongoDB seeding with port forwarding"/>
+
+   Connection string with Username/Password
+   <img src="resources/mongodb-compass-connection.png" width="100%" title="Connection string with Username/Password"/>
+
+    MongoDB import users.json
+   <img src="resources/mongodb-compass-import.png" width="100%" title="MongoDB import users.json"/>
+   
+   </p>
 
 ### 3. [Run a Replicated Stateful Application](https://kubernetes.io/docs/tasks/run-application/run-replicated-stateful-application/)
 

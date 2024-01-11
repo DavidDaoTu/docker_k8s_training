@@ -1,0 +1,50 @@
+[
+    {
+        "_id": {
+            "$oid": "6439853c380c5c0912491892"
+        },
+        "id": 1,
+        "username": "admin",
+        "password": "admin",
+        "role": "admin",
+        "name": "admin",
+        "createdAt": {
+            "$date": "2023-03-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2023-03-01T00:00:00.000Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6439853c380c5c0912491893"
+        },
+        "id": 2,
+        "username": "manager",
+        "password": "manager",
+        "role": "manager",
+        "name": "manager",
+        "createdAt": {
+            "$date": "2023-03-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2023-03-01T00:00:00.000Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6439853c380c5c0912491894"
+        },
+        "id": 3,
+        "username": "sale",
+        "password": "sale",
+        "role": "sale",
+        "name": "sale",
+        "createdAt": {
+            "$date": "2023-03-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2023-03-01T00:00:00.000Z"
+        }
+    }
+]

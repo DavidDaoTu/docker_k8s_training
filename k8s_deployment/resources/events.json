@@ -1,0 +1,48 @@
+[{
+  "_id": {
+    "$oid": "643bd9e905f07cc71b335b0c"
+  },
+  "allDay": false,
+  "title": "Meeting",
+  "start": {
+    "$date": "2023-04-12T07:30:00.000Z"
+  }
+},{
+  "_id": {
+    "$oid": "643bd9e905f07cc71b335b0d"
+  },
+  "allDay": false,
+  "title": "Birthday Party",
+  "start": {
+    "$date": "2023-04-13T00:00:00.000Z"
+  },
+  "end": {
+    "$date": "2023-04-13T12:00:00.000Z"
+  },
+  "backgroundColor": "green",
+  "borderColor": "green"
+},{
+  "_id": {
+    "$oid": "643bd9e905f07cc71b335b0e"
+  },
+  "allDay": true,
+  "title": "Holyday",
+  "start": {
+    "$date": "2023-04-03T00:00:00.000Z"
+  },
+  "end": {
+    "$date": "2023-04-10T00:00:00.000Z"
+  }
+},{
+  "_id": {
+    "$oid": "643bd9e905f07cc71b335b0f"
+  },
+  "allDay": false,
+  "title": "Coding",
+  "start": {
+    "$date": "2023-04-18T00:30:00.000Z"
+  },
+  "end": {
+    "$date": "2023-04-20T11:00:00.000Z"
+  }
+}]

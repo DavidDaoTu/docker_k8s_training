@@ -1,18 +1,6 @@
 #! /bin/bash
-### Please refer to: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ for latest version
-sudo apt-get update -y
-# apt-transport-https may be a dummy package; if so, you can skip that package
-sudo apt-get install -y apt-transport-https ca-certificates curl gpg
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
-sudo apt-mark hold kubelet kubeadm kubectl
-
 #### For containers (docker) setup
 #### Please refer to: https://docs.docker.com/engine/install/ubuntu/  for latest version
-
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg -y; done
 #1: Set up Docker's apt repository.
 # Add Docker's official GPG key:
@@ -30,7 +18,8 @@ echo \
 
 sudo apt-get update -y
 # Don't install containerd (because k8s requires CRI, which containerd does not support)
-sudo apt-get install docker-ce docker-ce-cli docker-buildx-plugin docker-compose-plugin -y
+#sudo apt-get install docker-ce docker-ce-cli docker-buildx-plugin docker-compose-plugin -y
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 ### For container run-time interface (cri-dockerd)
 ## Suggested by: https://github.com/Mirantis/cri-dockerd?tab=readme-ov-file#using-cri-dockerd
@@ -57,3 +46,15 @@ sudo dpkg -i ./cri-dockerd*
 
 ### In order to fix CRI:
 # Remove service: https://www.baeldung.com/linux/create-remove-systemd-services
+
+#### Install K8S version v1.29
+### Please refer to: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/ for latest version
+sudo apt-get update -y
+# apt-transport-https may be a dummy package; if so, you can skip that package
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+# This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
